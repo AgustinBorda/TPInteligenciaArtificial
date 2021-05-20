@@ -16,8 +16,3 @@ def test_depth_first_search_with_cycle_detections():
     res = depth_first_tree_search_cycle_detection(GraphProblem("Arad", "Bucharest", romania_map))
     assert res.state == "Bucharest"
 
-#@pytest.mark.timeout(30)
-def test_1():
-    res = bidirectional_breadth_first_search(GraphProblem("Bucharest", "Timisoara", romania_map),GraphProblem("Timisoara", "Bucharest", romania_map))
-    assert res.state == "Timisoara"
-    print(res.path())

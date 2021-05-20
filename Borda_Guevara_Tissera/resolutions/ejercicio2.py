@@ -15,22 +15,25 @@ def bidirectional_breadth_first_search(problem, inverse_problem):
                 return create_solution(current_node, [node for node in inverse_explored
                                                       if node.state == current_node.state][0])
             explored.add(current_node)
-            frontier.extend(map(lambda node: (prefix, node), current_node.expand(problem)))  # Welcome to Python, enjoy
+            frontier.extend(map(lambda node: (prefix, node), current_node.expand(problem)))
         else:
             if current_node in explored:
                 return create_solution([node for node in explored if node.state == current_node.state][0], current_node)
             inverse_explored.add(current_node)
             frontier.extend(map(lambda node: (prefix, node), current_node.expand(inverse_problem)))
     return None
-# TODO: Hacerlo mas legible o Ponzio nos mata
 
-# TODO: pensar esto
-def create_solution(frontier_initial, frontier_goal):
-    current_parent = frontier_initial
-    current_element = frontier_goal.parent
-    while current_:
-        aux_element = current_element.parent
+
+def create_solution(frontier_from_initial, frontier_from_final):
+    current_parent = frontier_from_initial
+    current_element = frontier_from_final.parent
+    if not frontier_from_final.parent:  # If the frontier is a solution, does not have a parent,
+        return frontier_from_initial    # so return the frontier from initial.
+    while True:
+        aux_node = current_element.parent
         current_element.parent = current_parent
         current_parent = current_element
-        current_element = aux_element
-    return current_element
+        if not aux_node:
+            return current_element
+        current_element = aux_node
+    return None
