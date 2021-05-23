@@ -2,26 +2,32 @@ from search import Node
 from collections import deque
 
 
-def bidirectional_breadth_first_search(problem, inverse_problem):
+def bidirectional_breadth_first_search(problem, inverse_problem, explored_nodes=False):
     frontier = [(1, Node(inverse_problem.initial)), (0, Node(problem.initial))]
     explored = set()
     inverse_explored = set()
+    result = None
     while frontier:
         current = frontier.pop(0)
         prefix = current[0]
         current_node = current[1]
         if prefix == 0:
             if current_node in inverse_explored:
-                return create_solution(current_node, [node for node in inverse_explored
+                result = create_solution(current_node, [node for node in inverse_explored
                                                       if node.state == current_node.state][0])
+                break
             explored.add(current_node)
             frontier.extend(map(lambda node: (prefix, node), current_node.expand(problem)))
         else:
             if current_node in explored:
-                return create_solution([node for node in explored if node.state == current_node.state][0], current_node)
+                result = create_solution([node for node in explored if node.state == current_node.state][0], current_node)
+                break
             inverse_explored.add(current_node)
             frontier.extend(map(lambda node: (prefix, node), current_node.expand(inverse_problem)))
-    return None
+
+    if explored_nodes:
+        return result, len(explored.union(inverse_explored))
+    return result
 
 
 def create_solution(frontier_from_initial, frontier_from_final):
