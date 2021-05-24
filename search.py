@@ -257,11 +257,11 @@ def breadth_first_graph_search(problem):
     single line as below:
     return graph_search(problem, FIFOQueue())
     """
+    explored = set()
     node = Node(problem.initial)
     if problem.goal_test(node.state):
         return node
     frontier = deque([node])
-    explored = set()
     while frontier:
         node = frontier.popleft()
         explored.add(node.state)

@@ -3,7 +3,7 @@ from collections import deque
 
 
 def bidirectional_breadth_first_search(problem, inverse_problem):
-    frontier = [(1, Node(inverse_problem.initial)), (0, Node(problem.initial))]
+    frontier = [(0, Node(problem.initial)), (1, Node(inverse_problem.initial)), ]
     explored = set()
     inverse_explored = set()
     while frontier:
@@ -21,6 +21,7 @@ def bidirectional_breadth_first_search(problem, inverse_problem):
                 return create_solution([node for node in explored if node.state == current_node.state][0], current_node)
             inverse_explored.add(current_node)
             frontier.extend(map(lambda node: (prefix, node), current_node.expand(inverse_problem)))
+
     return None
 
 
