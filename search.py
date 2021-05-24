@@ -213,7 +213,7 @@ def depth_first_tree_search(problem):
     return None
 
 
-def depth_first_graph_search(problem):
+def depth_first_graph_search(problem, explored_nodes=False):
     """
     [Figure 3.7]
     Search the deepest nodes in the search tree first.
@@ -228,33 +228,42 @@ def depth_first_graph_search(problem):
     while frontier:
         node = frontier.pop()
         if problem.goal_test(node.state):
-            return node
+            if explored_nodes:
+                return node, len(explored)
         explored.add(node.state)
         frontier.extend(child for child in node.expand(problem)
                         if child.state not in explored and child not in frontier)
     return None
 
 
-def breadth_first_graph_search(problem):
+def breadth_first_graph_search(problem, explored_nodes=False):
     """[Figure 3.11]
     Note that this function can be implemented in a
     single line as below:
     return graph_search(problem, FIFOQueue())
     """
+    explored = set()
     node = Node(problem.initial)
     if problem.goal_test(node.state):
-        return node
+        if explored_nodes:
+            return node, len(explored)
+        else:
+            return node
     frontier = deque([node])
-    explored = set()
+    result = None
     while frontier:
         node = frontier.popleft()
         explored.add(node.state)
         for child in node.expand(problem):
             if child.state not in explored and child not in frontier:
                 if problem.goal_test(child.state):
-                    return child
+                    result = child
+                    break
                 frontier.append(child)
-    return None
+
+    if explored_nodes:
+        return result, len(explored)
+    return result
 
 
 def best_first_graph_search(problem, f, display=False):
