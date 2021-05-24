@@ -1,5 +1,3 @@
-from abc import ABC
-
 from search import EightPuzzle
 
 
@@ -20,18 +18,29 @@ class EightPuzzleExtended(EightPuzzle):
         return misplaced_cols + misplaced_rows
 
     def manhattan_distance(self, node):
-        return sum([abs((self.goal.index(x) - node.state.index(x)) // 3) + abs((self.goal.index(x) - node.state.index(x)) % 3) for x in node.state])
+        return sum([abs((self.goal.index(x) - node.state.index(x)) // 3) +
+                    abs((self.goal.index(x) - node.state.index(x)) % 3) for x in node.state])
 
     def gaschnig_index(self, node):
-        state = node.state
-        goal = self.goal
+        state = [i for i in node.state]
+        goal = [i for i in self.goal]
         moves = 0
+        blank_tile = -1
+        element_tile = -1
         while state != goal:
-            for i in range(len(goal)):
-                if state[i] != goal[i] and state[i] != 0:
-                    blank_index = state.index(0)
-                    aux = state[i]
-                    state[i] = state[blank_index]
-                    state[blank_index] = aux
-                    moves += 1
+            for i in range(len(state)):
+                if state[i] == 0:
+                    blank_tile = i
+                    break
+            for i in range(len(state)):
+                if state[i]-1 == blank_tile:
+                    element_tile = i
+            if blank_tile == element_tile or element_tile < 0 or blank_tile < 0:
+                for i in range(len(state)):
+                    if state[i] != goal[i] and state[i] != 0:
+                        element_tile = i
+            aux = state[element_tile]
+            state[element_tile] = state[blank_tile]
+            state[blank_tile] = aux
+            moves += 1
         return moves
