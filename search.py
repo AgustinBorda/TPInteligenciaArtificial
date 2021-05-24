@@ -184,13 +184,18 @@ def breadth_first_tree_search(problem):
     Repeats infinitely in case of loops.
     """
 
-    frontier = deque([Node(problem.initial)])  # FIFO queue
+    node = Node(problem.initial)
+    if problem.goal_test(node.state):
+        return node
+    frontier = deque([node])  # FIFO queue
 
     while frontier:
         node = frontier.popleft()
-        if problem.goal_test(node.state):
-            return node
-        frontier.extend(node.expand(problem))
+        for child in node.expand(problem):
+            if problem.goal_test(child.state):
+                return child
+            else:
+                frontier.append(child)
     return None
 
 
@@ -204,12 +209,23 @@ def depth_first_tree_search(problem):
     """
 
     frontier = [Node(problem.initial)]  # Stack
-
     while frontier:
         node = frontier.pop()
         if problem.goal_test(node.state):
             return node
         frontier.extend(node.expand(problem))
+    return None
+
+
+def depth_limited_tree_search(problem, depth):
+
+    frontier = [Node(problem.initial)]  # Stack
+    while frontier:
+        node = frontier.pop()
+        if problem.goal_test(node.state):
+            return node
+        if node.depth < depth:
+            frontier.extend(node.expand(problem))
     return None
 
 
@@ -292,6 +308,10 @@ def uniform_cost_search(problem, display=False):
     return best_first_graph_search(problem, lambda node: node.path_cost, display)
 
 
+def breadth_first_uniform_cost(problem, display=False):
+    return best_first_graph_search(problem, lambda node: node.depth, display)
+
+
 def depth_limited_search(problem, limit=50):
     """[Figure 3.17]"""
 
@@ -320,6 +340,54 @@ def iterative_deepening_search(problem):
         result = depth_limited_search(problem, depth)
         if result != 'cutoff':
             return result
+
+
+def bidirectional_breadth_first_search(problem, inverse_problem):
+    initial_frontier = [Node(problem.initial)]
+    final_frontier = [Node(inverse_problem.initial)]
+    while initial_frontier and final_frontier:
+        init = deque(initial_frontier)
+        if init.state in [n.state for n in final_frontier]:
+            return create_result(init, filter(lambda node: node.state == init.state, final_frontier)[0]) #The first element that collided
+        initial_frontier.append(init.expand(problem))
+        end = deque(final_frontier)
+        if end.state in [n.state for n in initial_frontier]:
+            return create_result(init, filter(lambda node: node.state == end.state, initial_frontier)[0]) #The first element that collided
+        final_frontier.append(end.expand(problem))
+    return None
+
+
+def create_result(init, end):
+    actual_parent = init
+    actual_son = end
+    while actual_son.parent is not None:
+        auxiliar_parent = actual_son.parent
+        actual_son.parent = actual_parent
+        actual_parent = actual_son
+        actual_son = auxiliar_parent
+    return actual_son
+
+
+def bidirectional_uniform_cost_search(problem, inverse_problem):
+    begin_frontier = PriorityQueue("min", lambda node: node.path_cost)
+    end_frontier = PriorityQueue("min", lambda node: node.path_cost)
+    begin_frontier.append(Node(problem.initial))
+    end_frontier.append(Node(inverse_problem.initial))
+    begin_set = {}
+    end_set = {}
+    while begin_frontier and end_frontier:
+        if begin_frontier[0].path_cost <= end_frontier[0].path_cost:
+            node = begin_frontier.pop()
+            begin_frontier.append(node.expand(problem))
+            begin_set.add(node)
+            if node in end_set:
+                return create_result(node, filter(lambda n: n in end_set and n.state == node.state)[0])
+        else:
+            node = end_frontier.pop()
+            end_frontier.append(node.expand(inverse_problem))
+            end_set.add(node)
+            if node in begin_set:
+                return create_result(node, filter(lambda n: n in begin_set and n.state == node.state)[0])
 
 
 # ______________________________________________________________________________
@@ -1519,8 +1587,9 @@ class InstrumentedProblem(Problem):
 
     def __init__(self, problem):
         self.problem = problem
-        self.succs = self.goal_tests = self.states = 0
+        self.succs = self.goal_tests = self.states = self.explored = 0
         self.found = None
+        self.generated = 1
 
     def actions(self, state):
         self.succs += 1
@@ -1528,10 +1597,12 @@ class InstrumentedProblem(Problem):
 
     def result(self, state, action):
         self.states += 1
+        self.generated += 1
         return self.problem.result(state, action)
 
     def goal_test(self, state):
         self.goal_tests += 1
+        self.explored += 1
         result = self.problem.goal_test(state)
         if result:
             self.found = state
@@ -1574,3 +1645,192 @@ def compare_graph_searchers():
                                 GraphProblem('Q', 'WA', australia_map)],
                       header=['Searcher', 'romania_map(Arad, Bucharest)',
                               'romania_map(Oradea, Neamt)', 'australia_map'])
+
+
+class MissionaryState:
+    def __init__(self, ml, mr, cl, cr, b):
+        self.leftM = ml
+        self.leftC = cl
+        self.rightM = mr
+        self.rightC = cr
+        self.boat = b
+
+    def __hash__(self):
+        return hash((self.leftM, self.leftC, self.rightM, self.rightC, self.boat))
+
+    def __eq__(self, other):
+        return self.leftM == other.leftM and self.leftC == other.leftC and self.rightC == other.rightC and\
+               self.rightM == other.rightM and self.boat == other.boat
+
+    def h(self):
+        return self.leftM + self.rightC
+
+    def __lt__(self, other):
+        return self.h() < other.h()
+
+    def __repr__(self):
+        return "[Lm: {}, Lc: {}, Rm: {}, Rc: {}, B: {}]"\
+            .format(self.leftM, self.leftC, self.rightM, self.rightC, self.boat)
+
+
+class MissionaryTransition:
+    def __init__(self, m, c):
+        self.mis = m
+        self.can = c
+
+    def is_enabled(self, s):
+        if s.boat == 0:
+            left_missionaries = s.leftM - self.mis
+            left_cannibals = s.leftC - self.can
+            right_missionaries = s.rightM + self.mis
+            right_cannibals = s.rightC + self.can
+            if ((left_missionaries >= left_cannibals or left_missionaries == 0) and
+                (right_missionaries >= right_cannibals or right_missionaries == 0)) and\
+                    (left_cannibals >= 0 and left_missionaries >= 0):
+                return True
+            else:
+                return False
+        else:
+            left_missionaries = s.leftM + self.mis
+            left_cannibals = s.leftC + self.can
+            right_missionaries = s.rightM - self.mis
+            right_cannibals = s.rightC - self.can
+            if ((left_missionaries >= left_cannibals or left_missionaries == 0) and
+                (right_missionaries >= right_cannibals or right_missionaries == 0)) and\
+                    (right_cannibals >= 0 and right_missionaries >= 0):
+                return True
+            else:
+                return False
+
+    def do(self, s):
+        s1 = MissionaryState(s.leftM, s.rightM, s.leftC, s.rightC, s.boat)
+        if s.boat == 0:
+            s1.boat = 1
+            s1.leftM -= self.mis
+            s1.leftC -= self.can
+            s1.rightM += self.mis
+            s1.rightC += self.can
+        else:
+            s1.boat = 0
+            s1.leftM += self.mis
+            s1.leftC += self.can
+            s1.rightM -= self.mis
+            s1.rightC -= self.can
+        return s1
+
+
+class MissionaryProblem(Problem):
+    def actions(self, state):
+        t = [MissionaryTransition(0, 1), MissionaryTransition(1, 0), MissionaryTransition(1, 1),
+             MissionaryTransition(2, 0), MissionaryTransition(0, 2)]
+        enabled_transitions = []
+        for transition in t:
+            if transition.is_enabled(state):
+                enabled_transitions.append(transition)
+        return enabled_transitions
+
+    def result(self, state, action):
+        return action.do(state)
+
+    def goal_test(self, state):
+        return self.goal == state
+
+    def path_cost(self, c, state1, action, state2):
+        return 1
+
+    def value(self, state):
+        return 1
+
+def tuple_sumatory(t):
+    acumulator = 0
+    for elem in t:
+        acumulator += elem
+    return acumulator
+
+
+class RobotState:
+    def __init__(self, mat, pos):
+        self.mat_state = mat
+        self.robot_position = pos
+
+    def __hash__(self):
+        return hash((tuple(self.mat_state), tuple(self.robot_position)))
+
+    def __eq__(self, other):
+        return self.robot_position == other.robot_position and self.mat_state == other.mat_state
+
+    def h(self):
+        return tuple_sumatory(self.mat_state[0]) + tuple_sumatory(self.mat_state[1]) + \
+               tuple_sumatory(self.mat_state[2])
+
+    def __lt__(self, other):
+        return self.h() < other.h()
+
+
+class RobotAction:
+    def __init__(self, mov_side, mov_height, aspire):
+        self.side = mov_side
+        self.height = mov_height
+        self.aspire = aspire
+
+    def is_enabled(self, s):
+        new_height = s.robot_position[1] + self.height
+        if new_height < 0 or new_height > 2:
+            return False
+        new_side = s.robot_position[0] + self.side
+        if new_side < 0 or new_side > 2:
+            return False
+        line = s.mat_state[s.robot_position[0]]
+        position = line[s.robot_position[1]]
+        if position != 1 and self.aspire == 1:
+            return False
+        return True
+
+    def do(self, s):
+        s1 = RobotState(s.mat_state, s.robot_position)
+        s1.robot_position = (s.robot_position[0] + self.side, s.robot_position[1] + self.height)
+        if self.aspire == 1:
+            s1.mat_state = modify_tuple(s.mat_state, s.robot_position)
+        return s1
+
+
+def modify_tuple(t, pos):
+    lista = list(t[pos[0]])
+    lista[pos[1]] = 0
+    tupla_modificada = tuple(lista)
+    lista_tuplas = []
+    for i in range(0, 3):
+        if i == pos[0]:
+            lista_tuplas.append(tupla_modificada)
+        else:
+            lista_tuplas.append(t[i])
+    return tuple(lista_tuplas)
+
+
+class RobotProblem(Problem):
+    def actions(self, state):
+        t = [RobotAction(0, 0, 0), RobotAction(0, 0, 1), RobotAction(1, 0, 0), RobotAction(0, 1, 0),
+             RobotAction(-1, 0, 0), RobotAction(0, -1, 0)]
+        enabled_transitions = []
+        for transition in t:
+            if transition.is_enabled(state):
+                enabled_transitions.append(transition)
+        return enabled_transitions
+
+    def result(self, state, action):
+        return action.do(state)
+
+    def goal_test(self, state):
+        return self.goal == state
+
+    def path_cost(self, c, state1, action, state2):
+        if action.side == 0 and action.height == 0 and action.aspire == 0:
+            return 0
+        else:
+            return 1
+
+    def value(self, state):
+        return 1
+
+
+
