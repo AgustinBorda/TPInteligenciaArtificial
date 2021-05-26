@@ -1,8 +1,7 @@
 from Borda_Guevara_Tissera.resolutions.ejercicio4 import EightPuzzleExtended
+from Borda_Guevara_Tissera.resolutions.ejercicio5 import iterative_deepening_astar_search
 from search import EightPuzzle, breadth_first_graph_search, depth_first_graph_search, InstrumentedProblem, astar_search
 from pytest_timeout import *
-from Borda_Guevara_Tissera.resolutions.ejercicio2 import bidirectional_breadth_first_search, \
-    instrumented_bidirectional_breadth_first_search
 
 instance_one = (5, 6, 8, 1, 3, 4, 7, 0, 2)
 instance_two = (6, 2, 8, 1, 3, 4, 7, 0, 5)

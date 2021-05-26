@@ -1,0 +1,48 @@
+Sea P nuestro problema
+
+
+P.initial = A
+P.goal = D
+
+Definimos los estados sucesores con la siguiente tabla:
+
+
+  A -> {B,C}
+
+  B -> {B0,B1,.....,Bn} (donde n es un numero lo suficientemente grande como para que nos quedemos sin memoria)
+
+  C -> {D}
+
+  D -> nil
+
+
+
+
+Los valores h de cada uno de los estados son:
+
+ h(A) = 0
+
+ h(B) = 2
+
+ h(C) = 1
+
+ h(d) = 3
+
+
+Con a*:                                                       con iterative deepening a* (limit = 0):
+
+{A}                                                           {A}
+
+A->                                                           A->
+
+{C, B}                                                        {C, B}   (como h(A) <= limit, podemos seguir expandiendo)
+
+C->                                                           C-> 
+
+{B, D}                                                        {B, D}  (como h(C) > limit, ya no podemos expandir)
+
+B->                                                           B->       (no podemos expandir B y colgar el programa)
+
+el programa se cuelga                                         {D}
+
+                                                              D -> solution!

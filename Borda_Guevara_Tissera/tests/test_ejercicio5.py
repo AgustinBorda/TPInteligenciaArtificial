@@ -1,28 +1,53 @@
 from Borda_Guevara_Tissera.resolutions.ejercicio5 import SixteenPuzzle, iterative_deepening_astar_search
-from search import InstrumentedProblem
-
-# instance_one = (3, 8, 12, 0, 1, 14, 10, 9, 11, 13, 2, 15, 4, 5, 7, 6)
-instance_two = (10, 3, 13, 5, 8, 2, 12, 11, 14, 7, 4, 15, 9, 6, 1, 0)
-instance_three = (10, 7, 15, 4, 13, 5, 1, 6, 2, 9, 14, 3, 0, 11, 12, 8)
-goal = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
+from search import InstrumentedProblem, astar_search
 
 instance_one = (1, 2, 3, 4, 5, 6, 7, 8, 0, 10, 11, 12, 13, 14, 9, 15)
+instance_two = (1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 0, 12, 13, 14, 9, 15)
+instance_three = (1, 2, 3, 4, 5, 6, 7, 8, 0, 10, 11, 12, 13, 14, 9, 15)
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
+
+# We use Gaschnig heuristic.
 
 
-def test_iterative_deepening_astar_search_misplaced_tiles_cols_rows_1():
-    sixteen_puzzle = InstrumentedProblem(SixteenPuzzle(initial=instance_one, goal=goal))
-    res = iterative_deepening_astar_search(sixteen_puzzle, SixteenPuzzle(sixteen_puzzle).misplaced_cols_rows)
-    assert res.state == goal
+def test_iterative_deepening_astar_1():
+    problem = InstrumentedProblem(SixteenPuzzle(initial=instance_one, goal=goal))
+    result = iterative_deepening_astar_search(problem, problem.gaschnig_index)
+    assert result.state == goal
 
 
-def test_iterative_deepening_astar_search_manhattan_1():
-    sixteen_puzzle = InstrumentedProblem(SixteenPuzzle(initial=instance_one, goal=goal))
-    res = iterative_deepening_astar_search(sixteen_puzzle, SixteenPuzzle(sixteen_puzzle).manhattan_distance)
-    assert res.state == goal
+def test_iterative_deepening_astar_2():
+    problem = InstrumentedProblem(SixteenPuzzle(initial=instance_two, goal=goal))
+    result = iterative_deepening_astar_search(problem, problem.gaschnig_index)
+    assert result.state == goal
 
 
-def test_iterative_deepening_astar_search_gaschnig_1():
-    sixteen_puzzle = InstrumentedProblem(SixteenPuzzle(initial=instance_one, goal=goal))
-    res = iterative_deepening_astar_search(sixteen_puzzle, SixteenPuzzle(sixteen_puzzle).gaschnig_index)
-    assert res.state == goal
+def test_iterative_deepening_astar_3():
+    problem = InstrumentedProblem(SixteenPuzzle(initial=instance_three, goal=goal))
+    result = iterative_deepening_astar_search(problem, problem.gaschnig_index)
+    assert result.state == goal
 
+
+def test_astar_1():
+    problem = InstrumentedProblem(SixteenPuzzle(initial=instance_one, goal=goal))
+    result = astar_search(problem, problem.gaschnig_index)
+    assert result.state == goal
+
+
+def test_astar_2():
+    problem = InstrumentedProblem(SixteenPuzzle(initial=instance_two, goal=goal))
+    result = astar_search(problem, problem.gaschnig_index)
+    assert result.state == goal
+
+
+def test_astar_3():
+    problem = InstrumentedProblem(SixteenPuzzle(initial=instance_three, goal=goal))
+    result = astar_search(problem, problem.gaschnig_index)
+    assert result.state == goal
+
+""" 
+    Existen casos resolvibles por iterative deepening a* que a* no puede resolver
+    como por ejemplo, si expandimos un nodo cuyos hijos nos llenarian la ram.
+    Ejemplo en "explicacion_astar_vs_idastar.txt"
+    Realizar estos tests seria muy costoso en tiempo y recursos, ya que precisamos agotar el heap
+    de Python.
+"""

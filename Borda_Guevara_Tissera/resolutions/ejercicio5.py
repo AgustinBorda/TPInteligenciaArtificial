@@ -43,27 +43,32 @@ class SixteenPuzzle(EightPuzzleExtended):
 
 
 def cost_limited_astar_search(problem, limit, f):
-    def recursive_cost_limited_astar_search(node, problem, limit, f):
-        if problem.goal_test(node.state):
-            return node
-        elif f(node) > limit:
-            return 'cutoff'
-        else:
-            cutoff_occurred = False
-            for child in node.expand(problem):
-                result = recursive_cost_limited_astar_search(child, problem, limit - 1, f)
-                if result == 'cutoff':
-                    cutoff_occurred = True
-                elif result is not None:
-                    return result
-            return 'cutoff' if cutoff_occurred else None
-    f = memoize(f, 'f')
-    return recursive_cost_limited_astar_search(Node(problem.initial), problem, limit, f)
+    frontier = PriorityQueue("min", lambda node: f(node))
+    frontier.append(Node(problem.initial))
+    res = limit  # Limit as a placeholder value
+    cutoff = False
+    explored = set()
+    while frontier:
+        n = frontier.pop()
+        if problem.goal_test(n.state):
+            return 1, n
+        if not cutoff and n not in explored:
+            frontier.extend(n.expand(problem))
+            explored.add(n)
+        if f(n) > limit:
+            cutoff = True
+            res = f(n)
+    return 0, res
 
 
 def iterative_deepening_astar_search(problem, h=None):
     h = memoize(h or problem.h, 'h')
-    for cost_limit in range(sys.maxsize):
+    prefix = 0
+    cost_limit = 0
+    result = None
+    while not prefix:
         result = cost_limited_astar_search(problem, cost_limit, lambda n: n.path_cost + h(n))
-        if result != 'cutoff':
-            return result
+        prefix = result[0]
+        if not prefix:
+            cost_limit = result[1]
+    return result[1]
