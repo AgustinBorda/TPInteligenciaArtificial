@@ -6,6 +6,8 @@ class EightPuzzleExtended(EightPuzzle):
     def value(self, state):
         pass
 
+    # Quantity of misplaced elements in rows +
+    # misplaced element in columns
     def misplaced_cols_rows(self, node):
         state = node.state
         goal = self.goal
@@ -17,10 +19,18 @@ class EightPuzzleExtended(EightPuzzle):
         misplaced_rows = sum(s != g for (s, g) in zip(node.state, self.goal))
         return misplaced_cols + misplaced_rows
 
+    # Manhattan's distance:
+    # the sum of the list of
+    # the sum of the sub of
+    # each goal index minus the actual index divided 3
+    # and the rest of that div
     def manhattan_distance(self, node):
         return sum([abs((self.goal.index(x) - node.state.index(x)) // 3) +
                     abs((self.goal.index(x) - node.state.index(x)) % 3) for x in node.state])
 
+    # Gaschnig's heuristic
+    # Quantity of direct exchanges between the blank tile and
+    # other elements.
     def gaschnig_index(self, node):
         state = [i for i in node.state]
         goal = [i for i in self.goal]
