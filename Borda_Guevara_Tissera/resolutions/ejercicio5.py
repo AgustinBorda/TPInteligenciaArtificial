@@ -1,7 +1,6 @@
 from search import Node
 from Borda_Guevara_Tissera.resolutions.ejercicio4 import EightPuzzleExtended
-from utils import *
-import sys
+from utils import PriorityQueue, memoize
 
 
 class SixteenPuzzle(EightPuzzleExtended):
@@ -41,6 +40,7 @@ class SixteenPuzzle(EightPuzzleExtended):
 
         return tuple(new_state)
 
+
 # heuristic limited best first search,
 # only expands the nodes with f <= limit and
 # the first with f > limit.
@@ -62,6 +62,7 @@ def cost_limited_astar_search(problem, limit, f):
             cutoff = True
             res = f(n)
     return 0, res
+
 
 # iterative deepening a*, executes a cost limited a*
 # with a growing limit (begins in 0)
