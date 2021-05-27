@@ -41,7 +41,10 @@ class SixteenPuzzle(EightPuzzleExtended):
 
         return tuple(new_state)
 
-
+# heuristic limited best first search,
+# only expands the nodes with f <= limit and
+# the first with f > limit.
+# with the right heuristic it becomes a cost limited astar search
 def cost_limited_astar_search(problem, limit, f):
     frontier = PriorityQueue("min", lambda node: f(node))
     frontier.append(Node(problem.initial))
@@ -60,7 +63,8 @@ def cost_limited_astar_search(problem, limit, f):
             res = f(n)
     return 0, res
 
-
+# iterative deepening a*, executes a cost limited a*
+# with a growing limit (begins in 0)
 def iterative_deepening_astar_search(problem, h=None):
     h = memoize(h or problem.h, 'h')
     prefix = 0
