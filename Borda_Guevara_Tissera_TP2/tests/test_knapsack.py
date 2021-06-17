@@ -48,3 +48,28 @@ def test_knapsack_hill_climbing_1():
     assert obj.__contains__((2, 500))
     assert obj.__contains__((1, 1001))
     assert not obj.__contains__((115, 20))
+
+
+def test_knapsack_hill_climbing_2():
+    archivo = open("knapPI_1_100_1000_1.txt")
+    linea=archivo.readline()
+    index = 0
+    data = []
+    capacity = 0
+    cant = 0
+
+    while linea != '':
+        # procesar línea
+        linea = archivo.readline()
+        lista = linea.split()
+        if index == 0 :
+            cant = int(lista[0])
+            capacity = int(lista[1])
+        if (index > 0) and (index <= cant) :
+            data.append((int(lista[1]), int(lista[0])))
+        index += 1
+
+    problem = KnapsackProblem(capacity, data)
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing(ins_problem)
+    assert result.value == 9147
