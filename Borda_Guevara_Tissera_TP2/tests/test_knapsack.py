@@ -1,5 +1,5 @@
 from Borda_Guevara_Tissera_TP2.resolutions.knapsack import KnapsackProblem, KnapsackState
-from search import hill_climbing, InstrumentedProblem
+from search import hill_climbing, InstrumentedProblem, simulated_annealing
 
 
 def test_knapsack_problem_initial():
@@ -35,55 +35,151 @@ def test_knapsack_value():
     assert problem.value(state) == state.value
 
 
-def test_knapsack_hill_climbing_1():
-    problem = KnapsackProblem(100, [(115, 20), (50, 1), (1, 1000), (2, 500), (1, 1001)])
-    ins_problem = InstrumentedProblem(problem)
-    result = hill_climbing(ins_problem)
-    assert result.value == 2502
-    assert result.weight == 54
-    assert result.capacity == 100
-    obj = ins_problem.objects(result)
-    assert obj.__contains__((50, 1))
-    assert obj.__contains__((1, 1000))
-    assert obj.__contains__((2, 500))
-    assert obj.__contains__((1, 1001))
-    assert not obj.__contains__((115, 20))
-
-
 def open_file(file):
     file = open(file)
-    line = file.readline()
-    index = 0
     data = []
-    capacity = 0
-    cant = 0
+    line = file.readline()
+    element_list = line.split()
+    cant = int(element_list[0])
+    capacity = int(element_list[1])
 
-    while line != '':
+    for i in range(0, cant):
         line = file.readline()
         element_list = line.split()
-        if index == 0:
-            cant = int(element_list[0])
-            capacity = int(element_list[1])
-        if (index > 0) and (index <= cant):
-            data.append((int(element_list[1]), int(element_list[0])))
-        index += 1
+        data.append((int(element_list[1]), int(element_list[0])))
 
     return capacity, data
 
 
-# Optimum = 9147
-# Value = 4427
-def test_knapsack_hill_climbing_2():
+# Hill Climbing Tests.
+def test_knapsack_hill_climbing_large_scale_1():
+    params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
+    assert optimum == 11238
+    assert result.value <= 7000
+    assert result.value >= 4500
+
+
+def test_knapsack_hill_climbing_large_scale_2():
     params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
     result = hill_climbing(ins_problem)
-    assert result.value == 9147
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
+    assert optimum == 9147
+    assert result.value <= 5500
+    assert result.value >= 2500
 
 
-def test_knapsack_hill_climbing_3():
-    params = open_file("../dataset/low-dimensional/f8_l-d_kp_23_10000")
+def test_knapsack_hill_climbing_large_scale_3():
+    params = open_file("../dataset/large_scale/knapPI_1_500_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
     result = hill_climbing(ins_problem)
-    assert result.value == 11238
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_500_1000_1").readline()))
+    assert optimum == 28857
+    assert result.value <= 10000
+    assert result.value >= 9800
+
+
+def test_knapsack_hill_climbing_large_scale_4():
+    params = open_file("../dataset/large_scale/knapPI_1_1000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_1000_1000_1").readline()))
+    assert optimum == 54503
+    assert result.value <= 16000
+    assert result.value >= 13000
+
+
+def test_knapsack_hill_climbing_large_scale_5():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 29000
+    assert result.value >= 22000
+
+
+def test_knapsack_hill_climbing_large_scale_6():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 100000
+    assert result.value >= 48000
+
+
+# Simulated Annealing tests.
+def test_knapsack_simulated_annealing_large_scale_1():
+    params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
+    assert optimum == 11238
+    assert result.value <= 4000
+    assert result.value >= 2000
+
+
+def test_knapsack_simulated_annealing_large_scale_2():
+    params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
+    assert optimum == 9147
+    assert result.value <= 4000
+    assert result.value >= 400
+
+
+def test_knapsack_simulated_annealing_large_scale_3():
+    params = open_file("../dataset/large_scale/knapPI_1_500_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_500_1000_1").readline()))
+    assert optimum == 28857
+    assert result.value <= 8000
+    assert result.value >= 1400
+
+
+def test_knapsack_simulated_annealing_large_scale_4():
+    params = open_file("../dataset/large_scale/knapPI_1_1000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_1000_1000_1").readline()))
+    assert optimum == 54503
+    assert result.value <= 10000
+    assert result.value >= 5300
+
+
+def test_knapsack_simulated_annealing_large_scale_5():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 14200
+    assert result.value >= 8500
+
+
+def test_knapsack_simulated_annealing_large_scale_6():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing(ins_problem)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 30000
+    assert result.value >= 25000
