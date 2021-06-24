@@ -50,26 +50,40 @@ def test_knapsack_hill_climbing_1():
     assert not obj.__contains__((115, 20))
 
 
-def test_knapsack_hill_climbing_2():
-    archivo = open("knapPI_1_100_1000_1.txt")
-    linea=archivo.readline()
+def open_file(file):
+    file = open(file)
+    line = file.readline()
     index = 0
     data = []
     capacity = 0
     cant = 0
 
-    while linea != '':
-        # procesar línea
-        linea = archivo.readline()
-        lista = linea.split()
-        if index == 0 :
-            cant = int(lista[0])
-            capacity = int(lista[1])
-        if (index > 0) and (index <= cant) :
-            data.append((int(lista[1]), int(lista[0])))
+    while line != '':
+        line = file.readline()
+        element_list = line.split()
+        if index == 0:
+            cant = int(element_list[0])
+            capacity = int(element_list[1])
+        if (index > 0) and (index <= cant):
+            data.append((int(element_list[1]), int(element_list[0])))
         index += 1
 
-    problem = KnapsackProblem(capacity, data)
+    return capacity, data
+
+
+# Optimum = 9147
+# Value = 4427
+def test_knapsack_hill_climbing_2():
+    params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
     result = hill_climbing(ins_problem)
     assert result.value == 9147
+
+
+def test_knapsack_hill_climbing_3():
+    params = open_file("../dataset/low-dimensional/f8_l-d_kp_23_10000")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing(ins_problem)
+    assert result.value == 11238
