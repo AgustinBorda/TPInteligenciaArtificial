@@ -21,12 +21,24 @@ def test_knapsack_add():
     assert not knapsack.objects_in[0]
 
 
+def test_knapsack_remove():
+    knapsack = KnapsackState(20, 10, 15, [True])
+    removed_knapsack = knapsack.remove_item((10, 15), 0)
+    assert removed_knapsack.capacity == knapsack.capacity
+    assert removed_knapsack.value == 0
+    assert removed_knapsack.weight == 0
+    assert knapsack.value == 15
+    assert knapsack.weight == 10
+    assert not removed_knapsack.objects_in[0]
+    assert knapsack.objects_in[0]
+
+
 def test_knapsack_actions():
     problem = KnapsackProblem(20, [(25, 30), (5, 9), (20, 200)])
     actions = problem.actions(problem.initial)
-    assert actions.__contains__(((5, 9), 1))
-    assert actions.__contains__(((20, 200), 2))
-    assert not actions.__contains__(((25, 30), 0))
+    assert actions.__contains__((1, (5, 9), 1))
+    assert actions.__contains__((1, (20, 200), 2))
+    assert not actions.__contains__((1, (25, 30), 0))
 
 
 def test_knapsack_value():

@@ -8,3 +8,7 @@ def test_knapsack_genetic_algorithm_large_scale_1():
     result = knapsack.solve()
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
     assert optimum == 11238
+    [i for i in result and i]
+
+
+

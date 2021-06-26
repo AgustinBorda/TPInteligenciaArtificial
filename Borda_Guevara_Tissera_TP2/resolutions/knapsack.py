@@ -11,9 +11,16 @@ class KnapsackState:
         self.objects_in = obj_in
 
     def add_item(self, item, object_place):
-        obj_in = self.objects_in.copy()
-        obj_in[object_place] = True
-        return KnapsackState(self.capacity, self.weight + item[0], self.value + item[1], obj_in)
+        if not self.objects_in[object_place]:
+            obj_in = self.objects_in.copy()
+            obj_in[object_place] = True
+            return KnapsackState(self.capacity, self.weight + item[0], self.value + item[1], obj_in)
+
+    def remove_item(self, item, position):
+        if self.objects_in[position]:
+            obj_in = self.objects_in.copy()
+            obj_in[position] = False
+            return KnapsackState(self.capacity, self.weight - item[0], self.value - item[1], obj_in)
 
     def __eq__(self, other):
         return (
@@ -34,11 +41,17 @@ class KnapsackProblem(Problem):
         available_items = []
         for i in range(len(self.knapsack_objects)):
             if (self.knapsack_objects[i][0] + state.weight <= state.capacity) and not state.objects_in[i]:
-                available_items.append((self.knapsack_objects[i], i))
+                available_items.append((1 ,self.knapsack_objects[i], i))
+        for i in range(len(state.objects_in)):
+            if state.objects_in[i]:
+                available_items.append((-1, self.knapsack_objects[i], i))  # We can sack the objects of the knapsack
         return available_items
 
     def result(self, state, action):
-        return state.add_item(action[0], action[1])
+        if action[0] > 0:
+            return state.add_item(action[1], action[2])
+        else:
+            return state.remove_item(action[1], action[2])
 
     def value(self, state):
         return state.value
