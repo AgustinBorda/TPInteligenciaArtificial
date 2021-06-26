@@ -11,6 +11,8 @@ from collections import deque
 
 from utils import *
 
+import matplotlib.pyplot as plt
+
 
 class Problem:
     """The abstract class for a formal problem. You should subclass
@@ -718,24 +720,54 @@ def hill_climbing(problem):
     return current.state
 
 
+def hill_climbing_random_restart(problem, restart_num=1):
+    state_list = {}
+    current = Node(problem.initial)
+    for i in range(restart_num):
+        while True:
+            neighbors = current.expand(problem)
+            if not neighbors:
+                break
+            neighbor = argmax_random_tie(neighbors, key=lambda node: problem.value(node.state))
+            if problem.value(neighbor.state) <= problem.value(current.state):
+                break
+            current = neighbor
+        state_list[problem.value(current.state)] = current.state
+        current = Node(problem.random_restart())
+
+    better_state = max(state_list.keys())
+    return state_list[better_state]
+
+
 def exp_schedule(k=20, lam=0.005, limit=100):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
 
 
+import pandas as pd
+df = pd.DataFrame(data=[[0,0,0]], columns=['A', 'B', 'C'])
+
 def simulated_annealing(problem, schedule=exp_schedule()):
     """[Figure 4.5] CAUTION: This differs from the pseudocode as it
     returns a state instead of a Node."""
+    def plot():
+        plt.scatter(df.A, df.B)
+        plt.show()
+    l = list()
     current = Node(problem.initial)
     for t in range(sys.maxsize):
         T = schedule(t)
         if T == 0:
+            # plot()
             return current.state
         neighbors = current.expand(problem)
         if not neighbors:
+            plot()
             return current.state
         next_choice = random.choice(neighbors)
         delta_e = problem.value(next_choice.state) - problem.value(current.state)
+        l.append([t, delta_e, T])
+        print([t, delta_e, T])
         if delta_e > 0 or probability(np.exp(delta_e / T)):
             current = next_choice
 

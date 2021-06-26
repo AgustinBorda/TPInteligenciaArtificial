@@ -1,5 +1,5 @@
-from Borda_Guevara_Tissera_TP2.resolutions.knapsack import KnapsackProblem, KnapsackState
-from search import hill_climbing, InstrumentedProblem, simulated_annealing
+from Borda_Guevara_Tissera_TP2.resolutions.knapsack import KnapsackProblem, KnapsackState, KnapsackProblemRandomState
+from search import hill_climbing, InstrumentedProblem, simulated_annealing, hill_climbing_random_restart
 
 
 def test_knapsack_problem_initial():
@@ -58,6 +58,7 @@ def test_knapsack_hill_climbing_large_scale_1():
     ins_problem = InstrumentedProblem(problem)
     result = hill_climbing(ins_problem)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
+    print(result.value)
     assert optimum == 11238
     assert result.value <= 7000
     assert result.value >= 4500
@@ -183,3 +184,41 @@ def test_knapsack_simulated_annealing_large_scale_6():
     assert optimum == 276457
     assert result.value <= 30000
     assert result.value >= 25000
+
+
+
+# Trying hill climbing with random reset 4544 6364
+def test_knapsack_hill_climbing_rr_large_scale_1():
+    params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
+    problem = KnapsackProblemRandomState(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing_random_restart(ins_problem, 100)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
+    print(result.value)
+    assert optimum == 11238
+    assert result.value <= 7000
+    assert result.value >= 4500
+
+
+def test_knapsack_hill_climbing_rr_large_scale_2():
+    params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
+    problem = KnapsackProblemRandomState(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing_random_restart(ins_problem, 5000)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
+    print(result.value)
+    assert optimum == 9147
+    assert result.value <= 8500
+    assert result.value >= 7000
+
+
+def test_knapsack_hill_climbing_rr_large_scale_3():
+    params = open_file("../dataset/large_scale/knapPI_1_500_1000_1")
+    problem = KnapsackProblemRandomState(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing_random_restart(ins_problem, 5000)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_500_1000_1").readline()))
+    assert optimum == 28857
+    print(result.value)
+    assert result.value <= 10000
+    assert result.value >= 9800
