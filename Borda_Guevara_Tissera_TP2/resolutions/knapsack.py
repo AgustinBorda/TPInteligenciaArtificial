@@ -63,13 +63,6 @@ class KnapsackProblem(Problem):
                 obj.append(self.knapsack_objects[i])
         return obj
 
-
-class KnapsackProblemRandomState(KnapsackProblem):
-    def __init__(self, capacity, objects, seed=0):
-        self.initial = KnapsackState(capacity, 0, 0, [False for i in range(len(objects))])
-        self.knapsack_objects = objects
-        self.random = np.random.RandomState(seed)
-
     def random_restart(self):
         new_state = KnapsackState(self.initial.capacity, 0, 0, [False] * len(self.knapsack_objects))
 
