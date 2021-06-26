@@ -743,31 +743,30 @@ def exp_schedule(k=20, lam=0.005, limit=100):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
 
-
-import pandas as pd
-df = pd.DataFrame(data=[[0,0,0]], columns=['A', 'B', 'C'])
-
 def simulated_annealing(problem, schedule=exp_schedule()):
     """[Figure 4.5] CAUTION: This differs from the pseudocode as it
     returns a state instead of a Node."""
-    def plot():
-        plt.scatter(df.A, df.B)
-        plt.show()
-    l = list()
+    x = list()
+    y = list()
     current = Node(problem.initial)
     for t in range(sys.maxsize):
         T = schedule(t)
+
         if T == 0:
-            # plot()
+            plt.scatter(x, y)
+            plt.show()
             return current.state
+
         neighbors = current.expand(problem)
         if not neighbors:
-            plot()
+            plt.plot(x, y,'.b-')
+            plt.show()
             return current.state
         next_choice = random.choice(neighbors)
         delta_e = problem.value(next_choice.state) - problem.value(current.state)
-        l.append([t, delta_e, T])
-        print([t, delta_e, T])
+        y.append(problem.value(current.state))
+        x.append(t)
+
         if delta_e > 0 or probability(np.exp(delta_e / T)):
             current = next_choice
 
