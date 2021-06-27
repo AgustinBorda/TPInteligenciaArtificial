@@ -4,9 +4,11 @@ from utils import probability
 from pylab import np
 from search import Node, sys
 
+
 def exp_schedule(k, lam, limit):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
+
 
 def simulated_annealing_plot(problem, values_for_schedule):
     """[Figure 4.5] CAUTION: This differs from the pseudocode as it

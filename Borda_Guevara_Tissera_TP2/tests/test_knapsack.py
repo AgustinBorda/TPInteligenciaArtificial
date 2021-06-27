@@ -249,6 +249,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_1():
     assert result.value <= 11238
     assert result.value >= 2000
 
+
 def test_knapsack_simulated_annealing_plot_large_scale_2():
     params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
     problem = KnapsackProblem(params[0], params[1])
@@ -281,6 +282,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_4():
     assert result.value <= 54503
     assert result.value >= 5300
 
+
 # Time to finish 50 sec
 def test_knapsack_simulated_annealing_plot_large_scale_5_1():
     params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
@@ -291,6 +293,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_5_1():
     assert optimum == 110625
     assert result.value <= 110625
     assert result.value >= 8500
+
 
 # Time to finish 27 sec
 def test_knapsack_simulated_annealing_plot_large_scale_5_2():
@@ -303,6 +306,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_5_2():
     assert result.value <= 110625
     assert result.value >= 8500
 
+
 # Time to finish 19 sec
 def test_knapsack_simulated_annealing_plot_large_scale_5_3():
     params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
@@ -313,6 +317,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_5_3():
     assert optimum == 110625
     assert result.value <= 110625
     assert result.value >= 8500
+
 
 # Time to finish 13 sec
 def test_knapsack_simulated_annealing_plot_large_scale_5_4():
@@ -325,6 +330,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_5_4():
     assert result.value <= 110625
     assert result.value >= 8500
 
+
 # Time to finish 4 min
 def test_knapsack_simulated_annealing_plot_large_scale_6_1():
     params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
@@ -335,6 +341,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_6_1():
     assert optimum == 276457
     assert result.value <= 276457
     assert result.value >= 25000
+
 
 # Time to finish 6 min
 def test_knapsack_simulated_annealing_plot_large_scale_6_2():
@@ -347,6 +354,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_6_2():
     assert result.value <= 276457
     assert result.value >= 25000
 
+
 # Time to finish 3 min
 def test_knapsack_simulated_annealing_plot_large_scale_6_3():
     params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
@@ -357,6 +365,7 @@ def test_knapsack_simulated_annealing_plot_large_scale_6_3():
     assert optimum == 276457
     assert result.value <= 276457
     assert result.value >= 25000
+
 
 # Time to finish 3 min
 def test_knapsack_simulated_annealing_plot_large_scale_6_4():
