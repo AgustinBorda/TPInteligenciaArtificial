@@ -1,0 +1,34 @@
+1- De entre los algoritmos de hill climbing, hill climbing con reinicios aleatorios y simulated annealing(con su funcion de scheduling por defecto)
+el mejor es hill climbing con reinicios aleatorios, esta es mejor que el hill climbing normal, ya que hill climbing con reinicios aleatorios primero realiza
+una ejecucion del hill climbing normal, para despues iniciar con los reinicios aleatorios, por lo que para toda ejecucion de hill climbing con reinicios aleatorios,
+se obtendra un resultado igual o mejor que con hill climbing (para el mismo seed). Para el caso de simulated annealing, la funcion de schedule por defecto se reduce muy rapido
+para la magnitud de los casos de test dados, por lo que sin modificarla, los hill climbing siempre dan resultados mejor que simulated annealing,
+por ejemplo, para el caso de 5000 elementos, los hill climbing van desde un valor de 48000 a 100000, mientras que para simulated annealing los valores se mueven de 25000 a 40000,
+con un optimo de 276457. Sin embargo, si se le da a simulated annealing una funcion de schedule apropiada para estos casos, se convierte en la mejor opcion disponible, ya que otorga mucho
+mejores resultados que hill climbing y hill climbing con reinicios aleatorios (para el caso anterior los valores van desde 190000 hasta 230000) y funciona mucho mas rapido que hill climbing con reinicios aleatorios (2,1 minutos contra 17,34 minutos).
+
+
+2- Simulated annealing con la funcion de schedule por defecto no necesitaba ser optimizada en tiempo (esto se realizaria haciendo que la funcion se decremente mas rapido, o que empiece desde 
+numeros mas bajos,o reducir el limite de tiempo, estas 3 cosas acelerarian la convergencia),
+ pero necesita obtener mejores resultados para poder ser una opcion viable, por lo que se opto por reducir el decremento de la funcion , aumentar el tiempo limite de esta y 
+hacer que inicie desde puntos mas altos, estas cosas no damnifican demasiado al tiempo de convergencia (para el caso de 5000 elementos es de 2,1 minutos) y logran que los resultados que devuelve
+el algoritmo se acerquen mucho mas al resultado que sus algoritmos competidores. Por ejemplo, para el caso de 5000 elementos se planteo parametrizar la funcion de schedule original con
+k=800, lam=0.0005 y limit=4000, originalmente el limite era de 10000, pero gracias a los ploteos de la funcion, se observo que a partir de 4000, los resultados se estancaban, hasta que 
+el algoritmo finalizaba.
+
+
+3- 
+  -El algoritmo selecciona de la siguiente forma: Ordena a los individuos en base al operador de seleccion que tenga instanciada el algoritmo, luego pone todos 
+los individuos ordenados en la lista de offspring y luego clona la poblacion con fines estadisticos.
+
+  -El crossover es realizado de esta forma: se empareja cada individuo de indice par con su sucesor en la lista offspring y a cada indice impar con su antecesor,
+luego se genera un numero aleatorio, y si este es menor a CXPB (la probabilidad de crossover) se llama al operador mate con la pareja de individuos,
+esta funcion deberia fusionarlos y devolverlos, pero siendo ambos una fusion de la pareja original, luego se borran los valores viejos de fitness de la pareja, ya que 
+esta ahora no existe.
+
+  -Finalmente, la mutacion consiste en: generar un numero aleatorio para cada individuo del offspring, y si este numero es menor a MTPB (la probabilidad mutacion)
+se invoca al operador mutate con el individuo en cuestion, este modifica al individuo de una forma leve por lo general, ya que una mutacion deberia ser un pequeno cambio en la estructura
+de un individuo, despues de aplicarlo, se elimina el valor viejo de fitness del individuo.
+
+Los individuos generados por crossover o mutacion no tienen una fitness valida, por ello, el algoritmo calcula el valor de fitness de cada individuo que no lo posea ya y luego se lo asigna,
+finalmente se le asigna a la poblacion actual el offspring, reemplazando a la generacion anterior por la actual. 
