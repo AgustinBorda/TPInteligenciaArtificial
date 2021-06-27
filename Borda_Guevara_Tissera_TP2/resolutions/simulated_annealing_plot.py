@@ -1,16 +1,17 @@
 import random
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 from utils import probability
 from pylab import np
 from search import Node, sys
 
-def exp_schedule(k=20, lam=0.005, limit=100):
+def exp_schedule(k, lam, limit):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
 
-def simulated_annealing_plot(problem, schedule=exp_schedule()):
+def simulated_annealing_plot(problem, values_for_schedule):
     """[Figure 4.5] CAUTION: This differs from the pseudocode as it
     returns a state instead of a Node."""
+    schedule = exp_schedule(values_for_schedule[0], values_for_schedule[1], values_for_schedule[2])
     x = list()
     y = list()
     current = Node(problem.initial)
@@ -22,7 +23,7 @@ def simulated_annealing_plot(problem, schedule=exp_schedule()):
             return current.state
         neighbors = current.expand(problem)
         if not neighbors:
-            plt.plot(x, y,'.b-')
+            plt.plot(x, y, '.b-')
             plt.show()
             return current.state
         next_choice = random.choice(neighbors)
