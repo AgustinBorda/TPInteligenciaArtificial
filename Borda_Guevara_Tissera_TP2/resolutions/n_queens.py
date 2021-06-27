@@ -8,7 +8,7 @@ def get_board(n):
     for i in range(start, end):
         row = list()
         for j in range(start, end):
-            row.append('X{}{}'.format(i, j))
+            row.append('X{}_{}'.format(i, j))
         board.append(row)
     return board
 

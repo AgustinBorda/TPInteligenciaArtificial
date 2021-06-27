@@ -76,7 +76,7 @@ def test_n_queens_dpll_10():
 def test_n_queens_dpll_12():
     n_queens = Nqueens(12)
     X00,  X01,  X02,  X03,  X04,  X05,  X06,  X07,  X08,  X09,  X010,  X011,  \
-    X10,  X11,  X12,  X13,  X14,  X15,  X16,  X17,  X18,  X19,  X110,  X111,  \
+    X10,  X11,  X12,  X13,  X14,  X15,  X16,  X17,  X18,  X19,  X1_10, X1_11,  \
     X20,  X21,  X22,  X23,  X24,  X25,  X26,  X27,  X28,  X29,  X210,  X211,  \
     X30,  X31,  X32,  X33,  X34,  X35,  X36,  X37,  X38,  X39,  X310,  X311,  \
     X40,  X41,  X42,  X43,  X44,  X45,  X46,  X47,  X48,  X49,  X410,  X411,  \
@@ -90,18 +90,18 @@ def test_n_queens_dpll_12():
 
     result = dpll(n_queens.clauses, n_queens.symbols, {})
     solution = {
-        X00: False,  X01: False,  X02: False,  X03: False,  X04: False,  X05: False,  X06: False,   X07: False,  X08: False,  X09: False,  X010: False,  X011: False,
-        X10: False,  X11: False,  X12: False,  X13: False,  X14: False,  X15: False,  X16: False,   X17: False,  X18: False,  X19: False,  X110: False,  X111: False,
-        X20: False,  X21: False,  X22: False,  X23: False,  X24: False,  X25: False,  X26: False,   X27: False,  X28: False,  X29: False,  X210: False,  X211: False,
-        X30: False,  X31: False,  X32: False,  X33: False,  X34: False,  X35: False,  X36: False,   X37: False,  X38: False,  X39: False,  X310: False,  X311: False,
-        X40: False,  X41: False,  X42: False,  X43: False,  X44: False,  X45: False,  X46: False,   X47: False,  X48: False,  X49: False,  X410: False,  X411: False,
-        X50: False,  X51: False,  X52: False,  X53: False,  X54: False,  X55: False,  X56: False,   X57: False,  X58: False,  X59: False,  X510: False,  X511: False,
-        X60: False,  X61: False,  X62: False,  X63: False,  X64: False,  X65: False,  X66: False,   X67: False,  X68: False,  X69: False,  X610: False,  X611: False,
-        X70: False,  X71: False,  X72: False,  X73: False,  X74: False,  X75: False,  X76: False,   X77: False,  X78: False,  X79: False,  X710: False,  X711: False,
-        X80: False,  X81: False,  X82: False,  X83: False,  X84: False,  X85: False,  X86: False,   X87: False,  X88: False,  X89: False,  X810: False,  X811: False,
-        X90: False,  X91: False,  X92: False,  X93: False,  X94: False,  X95: False,  X96: False,   X97: False,  X98: False,  X99: False,  X910: False,  X911: False,
-        X100: False, X101: False, X102: False, X103: False, X104: False, X105: False, X106: False,  X107: False, X108: False, X109: False, X1010: False, X1011: False,
-        X110: False, X111: False, X112: False, X113: False, X114: False, X115: False, X116: False,  X117: False, X118: False, X119: False, X1110: False, X1111: False
+        X00: True,   X01: False,  X02: False,  X03: False,  X04: False,  X05: False,  X06: False,   X07: False,  X08: False,  X09: False,  X010: False,  X011: False,
+        X10: False,  X11: False,  X12: True,   X13: False,  X14: False,  X15: False,  X16: False,   X17: False,  X18: False,  X19: False,  X1_10: False, X1_11: False,
+        X20: False,  X21: False,  X22: False,  X23: False,  X24: True,   X25: False,  X26: False,   X27: False,  X28: False,  X29: False,  X210: False,  X211: False,
+        X30: False,  X31: False,  X32: False,  X33: False,  X34: False,  X35: False,  X36: False,   X37: True,   X38: False,  X39: False,  X310: False,  X311: False,
+        X40: False,  X41: False,  X42: False,  X43: False,  X44: False,  X45: False,  X46: False,   X47: False,  X48: False,  X49: True,   X410: False,  X411: False,
+        X50: False,  X51: False,  X52: False,  X53: False,  X54: False,  X55: False,  X56: False,   X57: False,  X58: False,  X59: False,  X510: False,  X511: True,
+        X60: False,  X61: False,  X62: False,  X63: False,  X64: False,  X65: True,   X66: False,   X67: False,  X68: False,  X69: False,  X610: False,  X611: False,
+        X70: False,  X71: False,  X72: False,  X73: False,  X74: False,  X75: False,  X76: False,   X77: False,  X78: False,  X79: False,  X710: True,   X711: False,
+        X80: False,  X81: True,   X82: False,  X83: False,  X84: False,  X85: False,  X86: False,   X87: False,  X88: False,  X89: False,  X810: False,  X811: False,
+        X90: False,  X91: False,  X92: False,  X93: False,  X94: False,  X95: False,  X96: True,    X97: False,  X98: False,  X99: False,  X910: False,  X911: False,
+        X100: False, X101: False, X102: False, X103: False, X104: False, X105: False, X106: False,  X107: False, X108: True,  X109: False, X1010: False, X1011: False,
+        X110: False, X111: False, X112: False, X113: True,  X114: False, X115: False, X116: False,  X117: False, X118: False, X119: False, X1110: False, X1111: False
     }
     assert result == solution
 
@@ -124,6 +124,7 @@ def test_n_queens_tte_4():
     assert result == solution
 
 
+# Resuelve en 2.5 minutes
 def test_n_queens_tte_5():
     n_queens = Nqueens(5)
     X00, X01, X02, X03, X04, \
@@ -133,11 +134,11 @@ def test_n_queens_tte_5():
     X40, X41, X42, X43, X44 = n_queens.symbols
 
     result = tt_entails(Expr('&', *n_queens.kb.clauses))
-    solution = {
-        X00: True,  X01: False, X02: False, X03: False, X04: False,
-        X10: False, X11: False, X12: False, X13: True,  X14: False,
-        X20: False, X21: True,  X22: False, X23: False, X24: False,
-        X30: False, X31: False, X32: False, X33: False, X34: True,
-        X40: False, X41: False, X42: True,  X43: False, X44: False,
+    solution_0 = {
+        X00: False, X01: True, X02: False, X03: False, X04: False,
+        X10: False, X11: False, X12: False, X13: True, X14: False,
+        X20: True, X21: False, X22: False, X23: False, X24: False,
+        X30: False, X31: False, X32: True, X33: False, X34: False,
+        X40: False, X41: False, X42: False, X43: False, X44: True
     }
-    assert result == solution
+    assert result == solution_0
