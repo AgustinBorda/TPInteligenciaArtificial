@@ -25,7 +25,7 @@ def simulated_annealing_plot(problem, values_for_schedule):
             return current.state
         neighbors = current.expand(problem)
         if not neighbors:
-            plt.plot(x, y, '.b-')
+            plt.scatter(x, y)
             plt.show()
             return current.state
         next_choice = random.choice(neighbors)

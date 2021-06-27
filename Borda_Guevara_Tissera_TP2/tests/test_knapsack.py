@@ -151,7 +151,7 @@ def test_knapsack_simulated_annealing_large_scale_2():
     result = simulated_annealing(ins_problem)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
     assert optimum == 9147
-    assert result.value <= 4000
+    assert result.value <= 4500
     assert result.value >= 400
 
 
@@ -173,7 +173,7 @@ def test_knapsack_simulated_annealing_large_scale_4():
     result = simulated_annealing(ins_problem)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_1000_1000_1").readline()))
     assert optimum == 54503
-    assert result.value <= 10000
+    assert result.value <= 13000
     assert result.value >= 5300
 
 
@@ -195,19 +195,17 @@ def test_knapsack_simulated_annealing_large_scale_6():
     result = simulated_annealing(ins_problem)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
     assert optimum == 276457
-    assert result.value <= 30000
+    assert result.value <= 40000
     assert result.value >= 25000
 
 
-
-# Trying hill climbing with random reset 4544 6364
+# Hill Climbing Random reset tests
 def test_knapsack_hill_climbing_rr_large_scale_1():
     params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
     result = hill_climbing_random_restart(ins_problem, 100)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
-    print(result.value)
     assert optimum == 11238
     assert result.value <= 7000
     assert result.value >= 4500
@@ -217,24 +215,55 @@ def test_knapsack_hill_climbing_rr_large_scale_2():
     params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
-    result = hill_climbing_random_restart(ins_problem, 5000)
+    result = hill_climbing_random_restart(ins_problem, 300)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
-    print(result.value)
     assert optimum == 9147
     assert result.value <= 8500
-    assert result.value >= 7000
+    assert result.value >= 6100
 
 
 def test_knapsack_hill_climbing_rr_large_scale_3():
     params = open_file("../dataset/large_scale/knapPI_1_500_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
-    result = hill_climbing_random_restart(ins_problem, 5000)
+    result = hill_climbing_random_restart(ins_problem, 100)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_500_1000_1").readline()))
     assert optimum == 28857
-    print(result.value)
-    assert result.value <= 10000
+    assert result.value <= 13000
     assert result.value >= 9800
+
+
+def test_knapsack_hill_climbing_rr_large_scale_4():
+    params = open_file("../dataset/large_scale/knapPI_1_1000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing_random_restart(ins_problem, 100)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_1000_1000_1").readline()))
+    assert optimum == 54503
+    assert result.value <= 20000
+    assert result.value >= 17000
+
+
+def test_knapsack_hill_climbing_rr_large_scale_5():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing_random_restart(ins_problem, 100)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 30000
+    assert result.value >= 27000
+
+
+def test_knapsack_hill_climbing_rr_large_scale_6():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = hill_climbing_random_restart(ins_problem, 100)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 100000
+    assert result.value >= 48000
 
 
 # Simulated Annealing tests.
@@ -254,11 +283,11 @@ def test_knapsack_simulated_annealing_plot_large_scale_2():
     params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
-    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 5000))
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
     assert optimum == 9147
-    assert result.value <= 9147
-    assert result.value >= 400
+    assert result.value <= optimum
+    assert result.value >= 8400
 
 
 def test_knapsack_simulated_annealing_plot_large_scale_3():
@@ -291,8 +320,8 @@ def test_knapsack_simulated_annealing_plot_large_scale_5_1():
     result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
     assert optimum == 110625
-    assert result.value <= 110625
-    assert result.value >= 8500
+    assert result.value <= 100000
+    assert result.value >= 89000
 
 
 # Time to finish 27 sec
@@ -327,8 +356,8 @@ def test_knapsack_simulated_annealing_plot_large_scale_5_4():
     result = simulated_annealing_plot(ins_problem, (500, 0.0005, 3000))
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
     assert optimum == 110625
-    assert result.value <= 110625
-    assert result.value >= 8500
+    assert result.value <= 90000
+    assert result.value >= 85000
 
 
 # Time to finish 4 min
@@ -375,5 +404,5 @@ def test_knapsack_simulated_annealing_plot_large_scale_6_4():
     result = simulated_annealing_plot(ins_problem, (800, 0.0005, 4000))
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
     assert optimum == 276457
-    assert result.value <= 276457
-    assert result.value >= 25000
+    assert result.value <= 230000
+    assert result.value >= 190000
