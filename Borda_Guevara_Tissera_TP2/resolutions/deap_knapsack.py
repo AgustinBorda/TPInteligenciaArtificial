@@ -4,8 +4,6 @@ from deap import creator
 from deap import tools
 
 
-import random
-
 from utils import probability
 
 
@@ -20,7 +18,7 @@ class GeneticKnapsack:
                 weight += self.all_items[i][0]
             if weight > self.MAX_WEIGHT:
                 value = -1
-        return value, value/(weight+1)
+        return value, 1/(weight+1)
 
     def __init__(self, max_weight, items):
         self.MAX_WEIGHT = max_weight
@@ -45,5 +43,5 @@ class GeneticKnapsack:
         pop = self.toolbox.population(n=NUMBER_INDIVIDUALS)
         hall_of_fame = tools.HallOfFame(NUMBER_INDIVIDUALS)
         return deap.algorithms.eaSimple(pop, self.toolbox, CROSS_PROB, MUT_PROB,
-                                        NUMBER_GENERATIONS, halloffame=hall_of_fame)[0]
+                                        NUMBER_GENERATIONS, halloffame=hall_of_fame, verbose=False)[0]
 

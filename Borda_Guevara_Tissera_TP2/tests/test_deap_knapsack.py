@@ -57,9 +57,20 @@ def test_knapsack_genetic_algorithm_low_dimensional_5():
 def test_knapsack_genetic_algorithm_large_scale_1():
     params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
     knapsack = GeneticKnapsack(params[0], params[1])
-    result = knapsack.solve(9000, 200)
+    result = knapsack.solve(5000, 200)
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
     result = sorted(result, key=lambda item: item.fitness, reverse=True)
     assert optimum == 9147
     assert result[0].fitness.values[0] <= 9000
-    assert result[0].fitness.values[0] >= 7500
+    assert result[0].fitness.values[0] >= 6800
+
+
+def test_knapsack_genetic_algorithm_large_scale_2():
+    params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
+    knapsack = GeneticKnapsack(params[0], params[1])
+    result = knapsack.solve(5000, 500, mtp=0.7)
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
+    result = sorted(result, key=lambda item: item.fitness, reverse=True)
+    assert optimum == 11238
+    assert result[0].fitness.values[0] <= 11238
+    assert result[0].fitness.values[0] >= 11238
