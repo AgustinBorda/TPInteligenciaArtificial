@@ -243,8 +243,128 @@ def test_knapsack_simulated_annealing_plot_large_scale_1():
     params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
-    result = simulated_annealing_plot(ins_problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
     assert optimum == 11238
-    assert result.value <= 4000
+    assert result.value <= 11238
     assert result.value >= 2000
+
+def test_knapsack_simulated_annealing_plot_large_scale_2():
+    params = open_file("../dataset/large_scale/knapPI_1_100_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_100_1000_1").readline()))
+    assert optimum == 9147
+    assert result.value <= 9147
+    assert result.value >= 400
+
+
+def test_knapsack_simulated_annealing_plot_large_scale_3():
+    params = open_file("../dataset/large_scale/knapPI_1_500_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_500_1000_1").readline()))
+    assert optimum == 28857
+    assert result.value <= 28857
+    assert result.value >= 1400
+
+
+def test_knapsack_simulated_annealing_plot_large_scale_4():
+    params = open_file("../dataset/large_scale/knapPI_1_1000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_1000_1000_1").readline()))
+    assert optimum == 54503
+    assert result.value <= 54503
+    assert result.value >= 5300
+
+# Time to finish 50 sec
+def test_knapsack_simulated_annealing_plot_large_scale_5_1():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 110625
+    assert result.value >= 8500
+
+# Time to finish 27 sec
+def test_knapsack_simulated_annealing_plot_large_scale_5_2():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 6000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 110625
+    assert result.value >= 8500
+
+# Time to finish 19 sec
+def test_knapsack_simulated_annealing_plot_large_scale_5_3():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (500, 0.0005, 6000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 110625
+    assert result.value >= 8500
+
+# Time to finish 13 sec
+def test_knapsack_simulated_annealing_plot_large_scale_5_4():
+    params = open_file("../dataset/large_scale/knapPI_1_2000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (500, 0.0005, 3000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_2000_1000_1").readline()))
+    assert optimum == 110625
+    assert result.value <= 110625
+    assert result.value >= 8500
+
+# Time to finish 4 min
+def test_knapsack_simulated_annealing_plot_large_scale_6_1():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 276457
+    assert result.value >= 25000
+
+# Time to finish 6 min
+def test_knapsack_simulated_annealing_plot_large_scale_6_2():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (2000, 0.0005, 10000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 276457
+    assert result.value >= 25000
+
+# Time to finish 3 min
+def test_knapsack_simulated_annealing_plot_large_scale_6_3():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (500, 0.0005, 3000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 276457
+    assert result.value >= 25000
+
+# Time to finish 3 min
+def test_knapsack_simulated_annealing_plot_large_scale_6_4():
+    params = open_file("../dataset/large_scale/knapPI_1_5000_1000_1")
+    problem = KnapsackProblem(params[0], params[1])
+    ins_problem = InstrumentedProblem(problem)
+    result = simulated_annealing_plot(ins_problem, (800, 0.0005, 4000))
+    optimum = int((open("../dataset/large_scale-optimum/knapPI_1_5000_1000_1").readline()))
+    assert optimum == 276457
+    assert result.value <= 276457
+    assert result.value >= 25000
