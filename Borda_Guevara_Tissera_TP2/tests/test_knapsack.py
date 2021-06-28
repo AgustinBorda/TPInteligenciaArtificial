@@ -267,16 +267,15 @@ def test_knapsack_hill_climbing_rr_large_scale_6():
 
 
 # Simulated Annealing tests.
-# Bajo a un resultado mas cercano 1802
 def test_knapsack_simulated_annealing_plot_large_scale_1():
     params = open_file("../dataset/large_scale/knapPI_1_200_1000_1")
     problem = KnapsackProblem(params[0], params[1])
     ins_problem = InstrumentedProblem(problem)
-    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 10000))
+    result = simulated_annealing_plot(ins_problem, (1000, 0.0005, 4000))
     optimum = int((open("../dataset/large_scale-optimum/knapPI_1_200_1000_1").readline()))
     assert optimum == 11238
     assert result.value <= 11238
-    assert result.value >= 2000
+    assert result.value >= 10000
 
 
 def test_knapsack_simulated_annealing_plot_large_scale_2():
