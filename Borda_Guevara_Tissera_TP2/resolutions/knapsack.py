@@ -1,21 +1,26 @@
 from search import Problem
-import numpy as np
 import random
 
 
 class KnapsackState:
+    # A KnapsackState represents the state of the knapsack in
+    # a determinate moment in the knapsack problem
+    # The form of the items in the knapsack is
+    # (weight, value)
     def __init__(self, capacity, weight, value, obj_in):
         self.capacity = capacity
         self.weight = weight
         self.value = value
         self.objects_in = obj_in
 
+    # Item = (weight, value), position = int+
     def add_item(self, item, object_place):
         if not self.objects_in[object_place]:
             obj_in = self.objects_in.copy()
             obj_in[object_place] = True
             return KnapsackState(self.capacity, self.weight + item[0], self.value + item[1], obj_in)
 
+    # Item = (weight, value), position = int+
     def remove_item(self, item, position):
         if self.objects_in[position]:
             obj_in = self.objects_in.copy()
@@ -37,11 +42,13 @@ class KnapsackProblem(Problem):
         self.initial = KnapsackState(capacity, 0, 0, [False for i in range(len(objects))])
         self.knapsack_objects = objects
 
+    # This returns a tuple (flag, item, position)
+    # where the flag is positive if the action is add or negative otherwise
     def actions(self, state):
         available_items = []
         for i in range(len(self.knapsack_objects)):
             if (self.knapsack_objects[i][0] + state.weight <= state.capacity) and not state.objects_in[i]:
-                available_items.append((1 ,self.knapsack_objects[i], i))
+                available_items.append((1, self.knapsack_objects[i], i))
         for i in range(len(state.objects_in)):
             if state.objects_in[i]:
                 available_items.append((-1, self.knapsack_objects[i], i))  # We can sack the objects of the knapsack
@@ -63,6 +70,8 @@ class KnapsackProblem(Problem):
                 obj.append(self.knapsack_objects[i])
         return obj
 
+    # The random restart fills a empty knapsack with random objects until
+    # a random weight is reached, or until it fails to put in an element for 10 times in a row
     def random_restart(self):
         new_state = KnapsackState(self.initial.capacity, 0, 0, [False] * len(self.knapsack_objects))
 
