@@ -33,6 +33,16 @@ de un individuo, despues de aplicarlo, se elimina el valor viejo de fitness del 
 Los individuos generados por crossover o mutacion no tienen una fitness valida, por ello, el algoritmo calcula el valor de fitness de cada individuo que no lo posea ya y luego se lo asigna,
 finalmente se le asigna a la poblacion actual el offspring, reemplazando a la generacion anterior por la actual. 
 
+4-Basado en la evidencia otorgada con los tests efectuados, podriamos concluir que el enfoque de simulated annealing es superior en casos grandes(de 100 elementos o mas), dado que converge a valores
+mas cercanos al optimo y en menos tiempo, ademas de tener un rasgo de dispersion menor de una ejecucion de test a otra. Por otra parte,
+en casos chicos los algoritmos geneticos vencen, ya que para lograr resultados parecidos, annealing demora mas tiempo que un ga (lo opuesto que pasa en casos grandes).
+Estas conclusiones se extraen de casos de tests con unas implementaciones y algoritmos particulares, por lo que hay un margen de error para las afirmaciones previas, puesto que
+pueden existir mejores funciones de fitness y mejores representaciones del problema de la mochila en grandes dimensiones en los ga, o mejores funciones de schedule para pequenos casos
+en simulated annealing.
+Una cosa a favor de los algoritmos evolutivos es que no es necesario definir reglas de avance ni nada parecido,
+ya que la fitness deberia moderar eso, esto lleva a que en los ga haya menos posibilidades de errores por parte del programador. Por otra parte, simulated annealing es mucho mas
+eficiente en el uso de memoria que un ga.
+
 
 4-
 Implementacion de las n-reinas:
@@ -43,7 +53,6 @@ Clausulas ejemplo para n=4:
 
  - Solo puede haber una reina por diagonal
    - (X11 | X22 | X33 | X44) & (X12 | X23 | X34) & etc...
-
-  El algoritmo DPLL definitivamente es superior a enumeracion de modelos. En nuestrar pruebas pudimos encontrar que para n > 5 enumeracion de modelos se vuelve extremadamente
+  El algoritmo DPLL definitivamente es superior a enumeracion de modelos. En nuestras pruebas pudimos encontrar que para n > 5 enumeracion de modelos se vuelve extremadamente
 lento para encontrar una solucion (3 minutos para n=5) lo que tiene mucho sentido dada que el algoritmo es O(2^n)
   Por otro lado, DPLL pudo lograr resolver sin problemas y en un tiempo razonable instancias de n <= 12, para valores mas grandes de nuevo, la demora es muy grande.
