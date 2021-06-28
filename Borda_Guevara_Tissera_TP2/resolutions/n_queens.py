@@ -8,7 +8,7 @@ def get_board(n):
     for i in range(start, end):
         row = list()
         for j in range(start, end):
-            row.append('X{}{}'.format(i, j))
+            row.append('X{}_{}'.format(i, j))
         board.append(row)
     return board
 
@@ -64,6 +64,28 @@ def get_kb(clauses):
     for clause in clauses:
         kb.tell(clause)
     return kb
+
+
+def tt_entails(kb):
+    symbols = list(prop_symbols(kb))
+    return tt_check_all(kb, symbols, {})
+
+
+def tt_check_all(kb, symbols, model):
+    if not symbols:
+        if pl_true(kb, model):
+            return model
+        else:
+            return None
+    else:
+        P, rest = symbols[0], symbols[1:]
+        res_0 = tt_check_all(kb, rest, extend(model, P, True))
+        if res_0:
+            return res_0
+        res_1 = tt_check_all(kb, rest, extend(model, P, False))
+        if res_1:
+            return res_1
+        return None
 
 
 class Nqueens:
