@@ -35,6 +35,15 @@ finalmente se le asigna a la poblacion actual el offspring, reemplazando a la ge
 
 
 4-
-  El algoritmo DPLL definitivamente es suerior a enumeracion de modelos. En nuestrar pruebas pudimos encontrar que para n > 5 enumeracion de modelos se vuelve extremadamente
+Implementacion de las n-reinas:
+Clausulas ejemplo para n=4:
+ - Solo puede haber una reina por fila o columna:
+    - (X11 | X12 | X13 | X14) & (X21 | X22 | X23 | X24) & etc...
+    - forall m in [1:4]: forall i!=j: X(m,i) -> ~X(m,j) and forall i!=j: X(i,m) -> ~X(j,m)
+
+ - Solo puede haber una reina por diagonal
+   - (X11 | X22 | X33 | X44) & (X12 | X23 | X34) & etc...
+
+  El algoritmo DPLL definitivamente es superior a enumeracion de modelos. En nuestrar pruebas pudimos encontrar que para n > 5 enumeracion de modelos se vuelve extremadamente
 lento para encontrar una solucion (3 minutos para n=5) lo que tiene mucho sentido dada que el algoritmo es O(2^n)
   Por otro lado, DPLL pudo lograr resolver sin problemas y en un tiempo razonable instancias de n <= 12, para valores mas grandes de nuevo, la demora es muy grande.

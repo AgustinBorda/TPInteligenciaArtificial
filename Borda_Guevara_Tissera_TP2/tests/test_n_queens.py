@@ -76,7 +76,7 @@ def test_n_queens_dpll_10():
 def test_n_queens_dpll_12():
     n_queens = Nqueens(12)
     X00,  X01,  X02,  X03,  X04,  X05,  X06,  X07,  X08,  X09,  X010,  X011,  \
-    X10,  X11,  X12,  X13,  X14,  X15,  X16,  X17,  X18,  X19,  X1_10, X1_11,  \
+    X10,  X11,  X12,  X13,  X14,  X15,  X16,  X17,  X18,  X19,  X1_10, X1_11, \
     X20,  X21,  X22,  X23,  X24,  X25,  X26,  X27,  X28,  X29,  X210,  X211,  \
     X30,  X31,  X32,  X33,  X34,  X35,  X36,  X37,  X38,  X39,  X310,  X311,  \
     X40,  X41,  X42,  X43,  X44,  X45,  X46,  X47,  X48,  X49,  X410,  X411,  \
@@ -140,18 +140,18 @@ def test_n_queens_tte_5():
 
     result = tt_entails(Expr('&', *n_queens.kb.clauses))
     solution_0 = {
+        X00: False, X01: False, X02: False, X03: True, X04: False,
+        X10: False, X11: True, X12: False, X13: False, X14: False,
+        X20: False, X21: False, X22: False, X23: False, X24: True,
+        X30: False, X31: False, X32: True, X33: False, X34: False,
+        X40: True, X41: False, X42: False, X43: False, X44: False
+    }
+    solution_1 = {
         X00: False, X01: True,  X02: False, X03: False, X04: False,
         X10: False, X11: False, X12: False, X13: True,  X14: False,
         X20: True,  X21: False, X22: False, X23: False, X24: False,
         X30: False, X31: False, X32: True,  X33: False, X34: False,
         X40: False, X41: False, X42: False, X43: False, X44: True
-    }
-    solution_1 = {
-        X00: False, X01: False, X02: True,  X03: False, X04: False,
-        X10: False, X11: False, X12: False, X13: False, X14: True,
-        X20: False, X21: True,  X22: False, X23: False, X24: False,
-        X30: False, X31: False, X32: False, X33: True,  X34: False,
-        X40: True,  X41: False, X42: False, X43: False, X44: False
     }
     solution_2 = {
         X00: True,  X01: False, X02: False, X03: False, X04: False,
@@ -167,16 +167,42 @@ def test_n_queens_tte_5():
         X30: False, X31: False, X32: False, X33: False, X34: True,
         X40: False, X41: False, X42: True,  X43: False, X44: False
     }
-
     solution_4 = {
         X00: False, X01: False, X02: False, X03: False, X04: True,
-        X10: False, X11: True, X12: False, X13: False, X14: False,
-        X20: False, X21: False, X22: False, X23: True, X24: False,
-        X30: True, X31: False, X32: False, X33: False, X34: False,
-        X40: False, X41: False, X42: True, X43: False, X44: False
+        X10: False, X11: False, X12: True,  X13: False, X14: False,
+        X20: True,  X21: False, X22: False, X23: False, X24: False,
+        X30: False, X31: False, X32: False, X33: True,  X34: False,
+        X40: False, X41: True,  X42: False, X43: False, X44: False
     }
-
     solution_5 = {
+        X00: False, X01: False, X02: True, X03: False, X04: False,
+        X10: True, X11: False, X12: False, X13: False, X14: False,
+        X20: False, X21: False, X22: False, X23: True, X24: False,
+        X30: False, X31: True, X32: False, X33: False, X34: False,
+        X40: False, X41: False, X42: False, X43: False, X44: True
+    }
+    solution_6 = {
+        X00: False, X01: False, X02: True,  X03: False, X04: False,
+        X10: False, X11: False, X12: False, X13: False, X14: True,
+        X20: False, X21: True,  X22: False, X23: False, X24: False,
+        X30: False, X31: False, X32: False, X33: True,  X34: False,
+        X40: True,  X41: False, X42: False, X43: False, X44: False
+    }
+    solution_7 = {
+        X00: False, X01: False, X02: False, X03: False, X04: True,
+        X10: False, X11: True,  X12: False, X13: False, X14: False,
+        X20: False, X21: False, X22: False, X23: True,  X24: False,
+        X30: True,  X31: False, X32: False, X33: False, X34: False,
+        X40: False, X41: False, X42: True,  X43: False, X44: False
+    }
+    solution_8 = {
+        X00: False, X01: True,  X02: False, X03: False, X04: False,
+        X10: False, X11: False, X12: False, X13: False, X14: True,
+        X20: False, X21: False, X22: True,  X23: False, X24: False,
+        X30: True,  X31: False, X32: False, X33: False, X34: False,
+        X40: False, X41: False, X42: False, X43: True,  X44: False
+    }
+    solution_9 = {
         X00: False, X01: False, X02: False, X03: True,  X04: False,
         X10: True,  X11: False, X12: False, X13: False, X14: False,
         X20: False, X21: False, X22: True,  X23: False, X24: False,
@@ -188,4 +214,8 @@ def test_n_queens_tte_5():
            (result == solution_2) | \
            (result == solution_3) | \
            (result == solution_4) | \
-           (result == solution_5)
+           (result == solution_5) | \
+           (result == solution_6) | \
+           (result == solution_7) | \
+           (result == solution_8) | \
+           (result == solution_9)
