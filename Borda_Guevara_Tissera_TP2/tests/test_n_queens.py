@@ -115,13 +115,18 @@ def test_n_queens_tte_4():
     X30, X31, X32, X33 = n_queens.symbols
 
     result = tt_entails(Expr('&', *n_queens.kb.clauses))
-    solution = {
+    solution_0 = {
         X00: False, X01: True,  X02: False, X03: False,
         X10: False, X11: False, X12: False, X13: True,
         X20: True,  X21: False, X22: False, X23: False,
         X30: False, X31: False, X32: True,  X33: False
     }
-    assert result == solution
+    solution_1 = {X00: False, X01: False, X02: True,  X03: False,
+                  X10: True,  X11: False, X12: False, X13: False,
+                  X20: False, X21: False, X22: False, X23: True,
+                  X30: False, X31: True,  X32: False, X33: False
+    }
+    assert (result == solution_0) | (result == solution_1)
 
 
 # Resuelve en 2.5 minutes
@@ -135,10 +140,52 @@ def test_n_queens_tte_5():
 
     result = tt_entails(Expr('&', *n_queens.kb.clauses))
     solution_0 = {
-        X00: False, X01: True, X02: False, X03: False, X04: False,
-        X10: False, X11: False, X12: False, X13: True, X14: False,
-        X20: True, X21: False, X22: False, X23: False, X24: False,
-        X30: False, X31: False, X32: True, X33: False, X34: False,
+        X00: False, X01: True,  X02: False, X03: False, X04: False,
+        X10: False, X11: False, X12: False, X13: True,  X14: False,
+        X20: True,  X21: False, X22: False, X23: False, X24: False,
+        X30: False, X31: False, X32: True,  X33: False, X34: False,
         X40: False, X41: False, X42: False, X43: False, X44: True
     }
-    assert result == solution_0
+    solution_1 = {
+        X00: False, X01: False, X02: True,  X03: False, X04: False,
+        X10: False, X11: False, X12: False, X13: False, X14: True,
+        X20: False, X21: True,  X22: False, X23: False, X24: False,
+        X30: False, X31: False, X32: False, X33: True,  X34: False,
+        X40: True,  X41: False, X42: False, X43: False, X44: False
+    }
+    solution_2 = {
+        X00: True,  X01: False, X02: False, X03: False, X04: False,
+        X10: False, X11: False, X12: True,  X13: False, X14: False,
+        X20: False, X21: False, X22: False, X23: False, X24: True,
+        X30: False, X31: True,  X32: False, X33: False, X34: False,
+        X40: False, X41: False, X42: False, X43: True,  X44: False
+    }
+    solution_3 = {
+        X00: True,  X01: False, X02: False, X03: False, X04: False,
+        X10: False, X11: False, X12: False, X13: True,  X14: False,
+        X20: False, X21: True,  X22: False, X23: False, X24: False,
+        X30: False, X31: False, X32: False, X33: False, X34: True,
+        X40: False, X41: False, X42: True,  X43: False, X44: False
+    }
+
+    solution_4 = {
+        X00: False, X01: False, X02: False, X03: False, X04: True,
+        X10: False, X11: True, X12: False, X13: False, X14: False,
+        X20: False, X21: False, X22: False, X23: True, X24: False,
+        X30: True, X31: False, X32: False, X33: False, X34: False,
+        X40: False, X41: False, X42: True, X43: False, X44: False
+    }
+
+    solution_5 = {
+        X00: False, X01: False, X02: False, X03: True,  X04: False,
+        X10: True,  X11: False, X12: False, X13: False, X14: False,
+        X20: False, X21: False, X22: True,  X23: False, X24: False,
+        X30: False, X31: False, X32: False, X33: False, X34: True,
+        X40: False, X41: True,  X42: False, X43: False, X44: False
+    }
+    assert (result == solution_0) | \
+           (result == solution_1) | \
+           (result == solution_2) | \
+           (result == solution_3) | \
+           (result == solution_4) | \
+           (result == solution_5)
